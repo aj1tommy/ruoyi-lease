@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.apartment.mapper.PaymentTypeMapper">
+    
+    <resultMap type="PaymentType" id="PaymentTypeResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="payMonthCount"    column="pay_month_count"    />
+        <result property="additionalInfo"    column="additional_info"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isDeleted"    column="is_deleted"    />
+    </resultMap>
+
+    <sql id="selectPaymentTypeVo">
+        select id, name, pay_month_count, additional_info, create_time, update_time, is_deleted from payment_type
+    </sql>
+
+    <select id="selectPaymentTypeList" parameterType="PaymentType" resultMap="PaymentTypeResult">
+        <include refid="selectPaymentTypeVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectPaymentTypeById" parameterType="Long" resultMap="PaymentTypeResult">
+        <include refid="selectPaymentTypeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPaymentType" parameterType="PaymentType" useGeneratedKeys="true" keyProperty="id">
+        insert into payment_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="payMonthCount != null">pay_month_count,</if>
+            <if test="additionalInfo != null">additional_info,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="payMonthCount != null">#{payMonthCount},</if>
+            <if test="additionalInfo != null">#{additionalInfo},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePaymentType" parameterType="PaymentType">
+        update payment_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="payMonthCount != null">pay_month_count = #{payMonthCount},</if>
+            <if test="additionalInfo != null">additional_info = #{additionalInfo},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePaymentTypeById" parameterType="Long">
+        delete from payment_type where id = #{id}
+    </delete>
+
+    <delete id="deletePaymentTypeByIds" parameterType="String">
+        delete from payment_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

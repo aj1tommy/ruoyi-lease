@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.apartment.mapper.FacilityInfoMapper">
+    
+    <resultMap type="FacilityInfo" id="FacilityInfoResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="name"    column="name"    />
+        <result property="icon"    column="icon"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isDeleted"    column="is_deleted"    />
+    </resultMap>
+
+    <sql id="selectFacilityInfoVo">
+        select id, type, name, icon, create_time, update_time, is_deleted from facility_info
+    </sql>
+
+    <select id="selectFacilityInfoList" parameterType="FacilityInfo" resultMap="FacilityInfoResult">
+        <include refid="selectFacilityInfoVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectFacilityInfoById" parameterType="Long" resultMap="FacilityInfoResult">
+        <include refid="selectFacilityInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertFacilityInfo" parameterType="FacilityInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into facility_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="name != null">name,</if>
+            <if test="icon != null">icon,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="name != null">#{name},</if>
+            <if test="icon != null">#{icon},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFacilityInfo" parameterType="FacilityInfo">
+        update facility_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFacilityInfoById" parameterType="Long">
+        delete from facility_info where id = #{id}
+    </delete>
+
+    <delete id="deleteFacilityInfoByIds" parameterType="String">
+        delete from facility_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

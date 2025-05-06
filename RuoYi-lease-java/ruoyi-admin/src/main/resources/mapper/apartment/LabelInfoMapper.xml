@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.apartment.mapper.LabelInfoMapper">
+    
+    <resultMap type="LabelInfo" id="LabelInfoResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="name"    column="name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isDeleted"    column="is_deleted"    />
+    </resultMap>
+
+    <sql id="selectLabelInfoVo">
+        select id, type, name, create_time, update_time, is_deleted from label_info
+    </sql>
+
+    <select id="selectLabelInfoList" parameterType="LabelInfo" resultMap="LabelInfoResult">
+        <include refid="selectLabelInfoVo"/>
+        <where>  
+            <if test="type != null "> and type = #{type}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectLabelInfoById" parameterType="Long" resultMap="LabelInfoResult">
+        <include refid="selectLabelInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertLabelInfo" parameterType="LabelInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into label_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="name != null">name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="name != null">#{name},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLabelInfo" parameterType="LabelInfo">
+        update label_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLabelInfoById" parameterType="Long">
+        delete from label_info where id = #{id}
+    </delete>
+
+    <delete id="deleteLabelInfoByIds" parameterType="String">
+        delete from label_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
